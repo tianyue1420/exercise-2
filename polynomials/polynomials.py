@@ -1,3 +1,4 @@
+from itertools import zip_longest
 from numbers import Number
 
 
@@ -50,3 +51,28 @@ class Polynomial:
 
     def __radd__(self, other):
         return self + other
+
+    def __sub__(self, other):
+        c1 = self.coefficients[::-1]
+        c2 = other.coefficients[::-1]
+        res = [t1-t2 for t1, t2 in zip_longest(c1, c2, fillvalue=0)]
+        return Polynomial(*res[::-1])
+    
+    
+    def __mul__(self, other):
+        if isinstance(other, Number):
+            return float(self) * float(other)
+        else:
+            return float(self) * other
+
+    def __rmul__(self, other):
+        if isinstance(other, Number):
+            return float(other) * float(self)
+        else:
+            return other * float(self)
+
+    def __pow__(self,e): 
+        return Polynomial(pow(self.plist,e))
+
+    def __call__(self):
+        print("Instance is called via special method")
